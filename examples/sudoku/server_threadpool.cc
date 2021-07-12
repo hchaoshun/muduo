@@ -77,6 +77,7 @@ class SudokuServer
     }
   }
 
+  //todo 写结果操作是在工作线程，不是在io主线程？
   bool processRequest(const TcpConnectionPtr& conn, const string& request)
   {
     string id;
