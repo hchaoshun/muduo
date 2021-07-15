@@ -48,6 +48,7 @@ class ChatServer : noncopyable
     }
   }
 
+  //LengthHeaderCodec注册的回调函数，解包，然后发送
   void onStringMessage(const TcpConnectionPtr&,
                        const string& message,
                        Timestamp)
@@ -62,7 +63,7 @@ class ChatServer : noncopyable
 
   typedef std::set<TcpConnectionPtr> ConnectionList;
   TcpServer server_;
-  LengthHeaderCodec codec_;
+  LengthHeaderCodec codec_; //打包分包层
   ConnectionList connections_;
 };
 

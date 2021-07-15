@@ -18,6 +18,7 @@ class LengthHeaderCodec : muduo::noncopyable
   {
   }
 
+  //解析数据，并调用messageCallback_
   void onMessage(const muduo::net::TcpConnectionPtr& conn,
                  muduo::net::Buffer* buf,
                  muduo::Timestamp receiveTime)
@@ -49,6 +50,7 @@ class LengthHeaderCodec : muduo::noncopyable
   }
 
   // FIXME: TcpConnectionPtr
+  //将string打包为buffer，并通过conn发送
   void send(muduo::net::TcpConnection* conn,
             const muduo::StringPiece& message)
   {

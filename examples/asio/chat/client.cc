@@ -36,6 +36,7 @@ class ChatClient : noncopyable
     client_.disconnect();
   }
 
+  //lock保护智能指针
   void write(const StringPiece& message)
   {
     MutexLockGuard lock(mutex_);
@@ -46,6 +47,7 @@ class ChatClient : noncopyable
   }
 
  private:
+  //lock保护智能指针
   void onConnection(const TcpConnectionPtr& conn)
   {
     LOG_INFO << conn->localAddress().toIpPort() << " -> "
@@ -63,10 +65,13 @@ class ChatClient : noncopyable
     }
   }
 
+  //LengthHeaderCodec注册的回调函数，解包，然后打印
   void onStringMessage(const TcpConnectionPtr&,
                        const string& message,
                        Timestamp)
   {
+    //printf线程安全，所以不加锁
+    //std::cout 不是线程安全
     printf("<<< %s\n", message.c_str());
   }
 
