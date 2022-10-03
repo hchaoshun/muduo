@@ -16,6 +16,7 @@
 using namespace muduo;
 using namespace muduo::net;
 
+// Reactor单线程模式，IO线程读写数据，threadPool_计算
 class SudokuServer
 {
  public:
@@ -77,7 +78,7 @@ class SudokuServer
     }
   }
 
-  //todo 写结果操作是在工作线程，不是在io主线程？
+  //读写在io线程，计算在工作线程
   bool processRequest(const TcpConnectionPtr& conn, const string& request)
   {
     string id;
