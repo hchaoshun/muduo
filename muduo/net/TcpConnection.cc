@@ -375,6 +375,7 @@ void TcpConnection::handleWrite()
                                outputBuffer_.readableBytes());
     if (n > 0)
     {
+      // TODO: 一次没有读完，再此读完才shutdown？
       outputBuffer_.retrieve(n);
       if (outputBuffer_.readableBytes() == 0)
       {

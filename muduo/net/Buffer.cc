@@ -22,6 +22,8 @@ const char Buffer::kCRLF[] = "\r\n";
 const size_t Buffer::kCheapPrepend;
 const size_t Buffer::kInitialSize;
 
+// 这个设计很巧妙，利用readv避免每个连接的初始buffer过大造成内存浪费，
+// 也避免反复调用read的系统开销
 ssize_t Buffer::readFd(int fd, int* savedErrno)
 {
   // saved an ioctl()/FIONREAD call to tell how much to read

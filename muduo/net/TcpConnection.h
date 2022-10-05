@@ -123,6 +123,8 @@ class TcpConnection : noncopyable,
   // void sendInLoop(string&& message);
   void sendInLoop(const StringPiece& message);
   void sendInLoop(const void* message, size_t len);
+  // shutdown只关闭写的一端，这样做是保证不会漏掉还在读的数据，
+  // 等client端read位0时由client端关闭
   void shutdownInLoop();
   // void shutdownAndForceCloseInLoop(double seconds);
   void forceCloseInLoop();

@@ -125,6 +125,8 @@ void Connector::restart()
   startInLoop();
 }
 
+// 注意：非阻塞sockfd还没有连接成功,
+// 在handleWrite执行getSocketError确认后才能正常写
 void Connector::connecting(int sockfd)
 {
   setState(kConnecting);
