@@ -140,8 +140,10 @@ class RpcChannel : public ::google::protobuf::RpcChannel
   AtomicInt64 id_;
 
   MutexLock mutex_;
+  // 记录每次发送的请求
   std::map<int64_t, OutstandingCall> outstandings_ GUARDED_BY(mutex_);
 
+  // 可以服务多个service
   const std::map<std::string, ::google::protobuf::Service*>* services_;
 };
 typedef std::shared_ptr<RpcChannel> RpcChannelPtr;

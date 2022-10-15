@@ -43,9 +43,9 @@ class RpcServer
  private:
   void onConnection(const TcpConnectionPtr& conn);
 
-  // void onMessage(const TcpConnectionPtr& conn,
-  //                Buffer* buf,
-  //                Timestamp time);
+ void onMessage(const TcpConnectionPtr& conn,
+                Buffer* buf,
+                Timestamp time);
 
   TcpServer server_;
   std::map<std::string, ::google::protobuf::Service*> services_;

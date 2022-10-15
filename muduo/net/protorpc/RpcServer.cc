@@ -23,8 +23,8 @@ RpcServer::RpcServer(EventLoop* loop,
 {
   server_.setConnectionCallback(
       std::bind(&RpcServer::onConnection, this, _1));
-//   server_.setMessageCallback(
-//       std::bind(&RpcServer::onMessage, this, _1, _2, _3));
+   server_.setMessageCallback(
+       std::bind(&RpcServer::onMessage, this, _1, _2, _3));
 }
 
 void RpcServer::registerService(google::protobuf::Service* service)
@@ -58,11 +58,11 @@ void RpcServer::onConnection(const TcpConnectionPtr& conn)
   }
 }
 
-// void RpcServer::onMessage(const TcpConnectionPtr& conn,
-//                           Buffer* buf,
-//                           Timestamp time)
-// {
-//   RpcChannelPtr& channel = boost::any_cast<RpcChannelPtr&>(conn->getContext());
-//   channel->onMessage(conn, buf, time);
-// }
+void RpcServer::onMessage(const TcpConnectionPtr& conn,
+                         Buffer* buf,
+                         Timestamp time)
+{
+ RpcChannelPtr& channel = boost::any_cast<RpcChannelPtr&>(conn->getContext());
+ channel->onMessage(conn, buf, time);
+}
 

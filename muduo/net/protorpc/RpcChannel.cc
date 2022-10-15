@@ -69,6 +69,7 @@ void RpcChannel::CallMethod(const ::google::protobuf::MethodDescriptor* method,
   codec_.send(conn_, message);
 }
 
+// 服务器/客户端收到请求的处理函数
 void RpcChannel::onMessage(const TcpConnectionPtr& conn,
                            Buffer* buf,
                            Timestamp receiveTime)
@@ -76,6 +77,12 @@ void RpcChannel::onMessage(const TcpConnectionPtr& conn,
   codec_.onMessage(conn, buf, receiveTime);
 }
 
+// messageCallback_, 服务器/客户端收到请求并解析出message后的处理函数
+// onMessage -> onRpcMessage
+// 1. type = request, 校验service和和method是否正确，
+//    调用service->CallMethod获取response，然后调用codec_.send(conn_, response)返回
+// 2. type = response, 从outstandings_校验请求是否是之前发送的，
+//    获取response，调用Closure->Run()
 void RpcChannel::onRpcMessage(const TcpConnectionPtr& conn,
                               const RpcMessagePtr& messagePtr,
                               Timestamp receiveTime)
@@ -83,6 +90,7 @@ void RpcChannel::onRpcMessage(const TcpConnectionPtr& conn,
   assert(conn == conn_);
   //printf("%s\n", message.DebugString().c_str());
   RpcMessage& message = *messagePtr;
+  // 客户端接收到返回后的处理
   if (message.type() == RESPONSE)
   {
     int64_t id = message.id();
@@ -113,6 +121,7 @@ void RpcChannel::onRpcMessage(const TcpConnectionPtr& conn,
       }
     }
   }
+  // 服务端接收到到请求后的处理
   else if (message.type() == REQUEST)
   {
     // FIXME: extract to a function
@@ -135,6 +144,7 @@ void RpcChannel::onRpcMessage(const TcpConnectionPtr& conn,
             google::protobuf::Message* response = service->GetResponsePrototype(method).New();
             // response is deleted in doneCallback
             int64_t id = message.id();
+            // 可以是异步rpc，返回的结果或错误在doneCallback里处理
             service->CallMethod(method, NULL, get_pointer(request), response,
                                 NewCallback(this, &RpcChannel::doneCallback, response, id));
             error = NO_ERROR;
