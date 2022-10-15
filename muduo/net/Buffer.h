@@ -110,6 +110,7 @@ class Buffer : public muduo::copyable
   // retrieve returns void, to prevent
   // string str(retrieve(readableBytes()), readableBytes());
   // the evaluation of two functions are unspecified
+  // 更新readIndex和writeIndex
   void retrieve(size_t len)
   {
     assert(len <= readableBytes());
@@ -387,6 +388,7 @@ class Buffer : public muduo::copyable
   const char* begin() const
   { return &*buffer_.begin(); }
 
+  // TODO
   void makeSpace(size_t len)
   {
     if (writableBytes() + prependableBytes() < len + kCheapPrepend)

@@ -183,6 +183,7 @@ google::protobuf::Message* ProtobufCodec::createMessage(const std::string& typeN
   return message;
 }
 
+// buf 位置在ProtobufTransportFormat nameLen处,
 MessagePtr ProtobufCodec::parse(const char* buf, int len, ErrorCode* error)
 {
   MessagePtr message;
